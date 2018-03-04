@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ block.super }}{% endblock %}
+
+  {% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+
+  <div class="bounds circle--page circle--article">
+    <div class="circle--fluid--cell circle--fluid--primary">
+      <h1>{% if form.instance.pk %} Edit Project {% else %} Create Project {% endif %}</h1>
+    </div>
+    <div class="grid-70">
+        <div class="circle--secondary--module">
+          <h3>Project Title</h3>
+            {{ form.title.errors }}
+            {{ form.title }}
+          <h3>Project Description</h3>
+            {{ form.description.errors }}
+            {{ form.description }}
+        </div>
+
+      <div class="circle--project--positions">
+        <h2>Positions</h2>
+
+        <ul class="circle--group--list circle--list">
+            {{ formset.management_form }}
+            {% for form in formset %}
+
+            <li class="formset">
+                {{ form.id}}
+                {{ form.name }}
+                {{ form.length }}
+                {{ form.description }}
+                {% for skill in form.skills %}
+                    {{ skill }}
+                {% endfor %}
+            </li>
+
+            {% endfor %}
+        </ul>
+
+        <button class="button button-primary" type="submit">Save</button>
+
+      </div>
+    </div>
+
+    <div class="grid-25 grid-push-5">
+      <div class="circle--secondary--module">
+        <h3>Project Timeline</h3>
+          {{ form.timeline.errors }}
+          {{ form.timeline }}
+        <h3>Applicant Requirements</h3>
+          {{ form.requirements.errors }}
+          {{ form.requirements }}
+      </div>
+    </div>
+
+  </div>
+</form>
+{% endblock %}
+
+{% block js %}
+    {% load static from staticfiles %}
+    {{ form.media.js }}
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+    <script>
+        $('.formset').formset({
+            addText: 'Add position',
+            deleteText: 'Remove'
+        });
+    </script>
+{% endblock js %}

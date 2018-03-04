@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+{% load course_extras %}
+
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+
+  <div class="bounds circle--page">
+
+    <div class="circle--page--header circle--fluid">
+          <div class="circle--fluid--cell circle--fluid--primary">
+            <h1>{{ profile }}'s Profile</h1>
+          </div>
+      {% if request.user == profile.user %}
+          <div class="circle--fluid--cell circle--fluid--secondary">
+            <a class="button icon-on-left" href="{% url 'profiles:edit_profile' %}">Edit</a>
+          </div>
+      {% endif %}
+    </div>
+
+    <div class="grid-70">
+      <div class="circle--article--body">
+        {{ profile.bio|markdown_to_html }}
+      </div>
+      <h2>My Projects</h2>
+      <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Project Title</th>
+            <th class="circle--cell--right">Project Needs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in user.projects.all %}
+            <tr class="clickable-row" data-href="{% url 'projects:project_detail' project.pk %}">
+              <td>
+                <h3>{{ project.title }}</h3>
+              </td>
+              <td class="circle--cell--right">
+                <span class="secondary-label">
+                  {{ project.positions.all|join:", " }}
+                </span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-25 grid-push-5">
+
+      <div class="circle--secondary--module">
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}" alt="Avatar" width="100%">
+        {% endif %}
+      </div>
+
+      <div class="circle--secondary--module">
+        <h4>My Skills</h4>
+        <ul class="unloaded">
+            {% for skill in profile.skills.all %}
+              <li>{{ skill }}</li>
+            {% endfor %}
+            {% for skill in skills %}
+              <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

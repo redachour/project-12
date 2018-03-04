@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+{% block title %}Applications{% endblock %}
+{% block content %}
+
+
+    <div class="bounds circle--page">
+    <div class="circle--page--header grid-100">
+      <h1>Applications</h1>
+    </div>
+    <div class="grid-25">
+      <div class="circle--filter circle--secondary--module">
+        <h4>Status</h4>
+        <ul class="circle--filter--list">
+          <li><a {% if status == 'all' %}class="selected"{% endif %} href="{% url 'profiles:my_applications' %}">All Applications</a></li>
+          <li><a {% if status == 'undecided' %}class="selected"{% endif %} href="?status=undecided">Undecided</a></li>
+          <li><a {% if status == 'accepted' %}class="selected"{% endif %} href="?status=accepted">Accepted</a></li>
+          <li><a {% if status == 'rejected' %}class="selected"{% endif %} href="?status=rejected">Rejected</a></li>
+        </ul>
+      </div>
+
+
+    </div>
+    {% if application_list %}
+    <div class="grid-70 grid-push-5">
+      <table class="u-full-width circle--table">
+        <thead>
+          <tr>
+            <th>Applicant</th>
+            <th class="circle--cell--right">Applicant Position</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for application in application_list %}
+            <tr class="clickable-row" data-href="{% url 'profiles:show_profile' application.applicant.id %}">
+                <td>
+                  <h3>{{ application.applicant }}</h3>
+                </td>
+                <td class="circle--cell--right">
+                  <span class="secondary-label">{{ application.position }}</span>
+                </td>
+                {% if application.is_accepted == None %}
+                    <td>
+                        <a href="{% url 'profiles:status_update' application.position.pk application.applicant.pk 'approve' %}">Approve</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'profiles:status_update' application.position.pk application.applicant.pk 'deny' %}">Deny</a>
+                    </td>
+
+                {% elif application.is_accepted %}
+                    <td colspan="2">Approved!</td>
+                {% elif not application.is_accepted %}
+                    <td colspan="2">Denied</td>
+                {% endif %}
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+    {% else %}
+    <div class="grid-70 grid-push-5">
+        <h3>You have no applications.</h3>
+    </div>
+    {% endif %}
+    </div>
+{% endblock %}

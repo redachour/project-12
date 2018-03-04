@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+  {% block content %}
+<div class="bounds circle--page circle--article">
+    <div class="grid-70">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h4>Are you sure you want to delete {{ project }}?</h4>
+        <div class="grid-30">
+            <button class="button button-primary" type="submit">Yes</button>
+            <a class="button button-secondary" href="{% url 'projects:project_list' %}">No</a>
+        </div>
+    </form>
+    </div>
+</div>
+{% endblock %}

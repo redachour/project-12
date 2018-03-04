@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+  <div class="bounds">
+    <div class="grid-30 centered">
+      <h2>Sign Up</h2>
+     <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" value="Sign Up" class="btn btn-default">
+    </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% load course_extras %}
+
+{% block title %}{{ block.super }}{% endblock %}
+{% block content %}
+
+{% if user == project.creator %}
+  <div class="circle--actions--bar">
+    <div class="bounds">
+      <div class="grid-100">
+        <a class="button" href="{% url 'projects:project_edit' project.pk %}">Edit Project</a>
+        <a class="button button-text" href="{% url 'projects:project_delete' project.pk %}">Delete Project</a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+  <div class="bounds circle--page circle--article">
+    <div class="grid-70">
+      <div class="circle--article--header">
+        <h1 class="circle--article--title">{{ project.title }} Project</h1>
+        <p class="circle--article--byline">Project Owner: <a href="{% url 'profiles:show_profile' project.creator.id %}">{{ project.creator.username }}</a></p>
+      </div>
+
+      <div class="circle--article--body">
+        {{ project.description|markdown_to_html }}
+      </div>
+
+      <div class="circle--project--positions">
+        <h2>Positions</h2>
+        <ul class="circle--group--list">
+        {% if not positions %}
+        <li>There are no OPEN positions on this project.</li>
+        {% else %}
+          {% for position in positions %}
+          <li>
+            <h3>{{ position.name }}</h3>
+            {% if position.length %}
+            <p>length of involvement: {{ position.length}} hours/week</p>
+            {% endif %}
+            <p>{{ position.description|markdown_to_html }}</p>
+          {% if position in applied_for %}
+              <button disabled class="button button-inactive">Already Applied</button>
+          {% else %}
+            <a class="button button-primary" href="{% url 'projects:position_apply' position.project.pk position.pk %}">Apply</a>
+          {% endif %}
+          </li>
+          {% endfor %}
+        {% endif %}
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="grid-25 grid-push-5">
+
+      <div class="circle--secondary--module">
+        <h3>Project Timeline</h3>
+        <p>{{ project.timeline }}</p>
+      </div>
+
+      <div class="circle--secondary--module">
+        <h3>Applicant Requirements</h3>
+        <p>{{ project.requirements }}</p>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
