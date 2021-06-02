@@ -21,7 +21,7 @@ django-tinymce==2.7.0
 djangorestframework==3.6.3
 humanize==0.5.1
 itsdangerous==0.24
-markdown2==2.3.4
+markdown2==2.4.0
 oauthlib==2.0.6
 pep8==1.7.1
 Pillow==5.0.0
